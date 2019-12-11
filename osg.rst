@@ -108,81 +108,83 @@ This is the first step in the process of making OSG tool integration in DE. The 
 
 1.5 An upload file `upload-files` at `/usr/bin` in the container
 
-We will use `fastq-sample <https://homes.cs.washington.edu/~dcjones/fastq-tools/fastq-sample.html>`_ for integrating as OSG-tool in DE. Let's first create a Docker image which satisfies the above requirements
+We will use `fastq-sample <https://homes.cs.washington.edu/~dcjones/fastq-tools/fastq-sample.html>`_ for integrating as OSG-tool in DE. Let's first create a Dockerfile using your favorite editor which satisfies the above requirements
 
-.. code-block::bash
+.. code-block:: bash
+  
+  $ mkdir fastq-sample-osg && cd fastq-sample-osg
 
-    FROM ubuntu:xenial
-    MAINTAINER Upendra Devisetty <upendra@cyverse.org>
+  $ wget https://raw.githubusercontent.com/upendrak/fastq-sample-osg/master/upload-files
 
-    RUN mkdir /cvmfs /work
+  $ wget https://raw.githubusercontent.com/upendrak/fastq-sample-osg/master/wrapper
 
-    RUN apt-get update \
-        && apt-get install -y lsb curl apt-transport-https python3 python-requests libfuse2 wget gcc make libpcre3-dev libz-dev 
+.. code-block:: bash
 
-    # Install fastq-tools
-    RUN wget http://homes.cs.washington.edu/~dcjones/fastq-tools/fastq-tools-0.8.tar.gz
-    RUN tar xvf fastq-tools-0.8.tar.gz
-    WORKDIR fastq-tools-0.8
-    RUN ./configure
-    RUN  make install fastq==0.8
+  $ vi Dockerfile
 
-    WORKDIR /work
+  FROM ubuntu:xenial
+  MAINTAINER Upendra Devisetty <upendra@cyverse.org>
 
-    # Define the iRODS package.
-    ENV ICMD_BASE="https://files.renci.org/pub/irods/releases/4.1.10/ubuntu14"
-    ENV ICMD_PKG="irods-icommands-4.1.10-ubuntu14-x86_64.deb"
+  RUN mkdir /cvmfs /work
 
-    # Install icommands.
-    RUN curl -o "$ICMD_PKG" "$ICMD_BASE/$ICMD_PKG" \
-            && dpkg -i "$ICMD_PKG" \
-            && rm -f "$ICMD_PKG"
+  RUN apt-get update \
+      && apt-get install -y lsb curl apt-transport-https python3 python-requests libfuse2 wget gcc make libpcre3-dev libz-dev 
 
-    # Install the wrapper script and the script to upload the output files.
-    ADD wrapper /usr/bin/wrapper
-    ADD upload-files /usr/bin/upload-files
+  # Install fastq-tools
+  RUN wget http://homes.cs.washington.edu/~dcjones/fastq-tools/fastq-tools-0.8.tar.gz
+  RUN tar xvf fastq-tools-0.8.tar.gz
+  WORKDIR fastq-tools-0.8
+  RUN ./configure
+  RUN  make install fastq==0.8
 
-    # Make the wrapper script the default command.
-    CMD ["wrapper"]
+  WORKDIR /work
 
-- Here is the link to the `Dockerfile <https://github.com/upendrak/fastq-sample-osg/blob/master/Dockerfile>`_
+  # Define the iRODS package.
+  ENV ICMD_BASE="https://files.renci.org/pub/irods/releases/4.1.10/ubuntu14"
+  ENV ICMD_PKG="irods-icommands-4.1.10-ubuntu14-x86_64.deb"
 
-- Here is the link to the `wrapper script <https://github.com/upendrak/fastq-sample-osg/blob/master/wrapper>`_
+  # Install icommands.
+  RUN curl -o "$ICMD_PKG" "$ICMD_BASE/$ICMD_PKG" \
+          && dpkg -i "$ICMD_PKG" \
+          && rm -f "$ICMD_PKG"
 
-- Here is the link to the `upload-files script <https://github.com/upendrak/fastq-sample-osg/blob/master/upload-files>`_
+  # Install the wrapper script and the script to upload the output files.
+  ADD wrapper /usr/bin/wrapper
+  ADD upload-files /usr/bin/upload-files
 
+  # Make the wrapper script the default command.
+  CMD ["wrapper"]
+
+.. Note::
+
+  The ``Dockerfile`` and ``wrapper`` files are specific for ``fastq-sample`` tool. If you want to create OSG tool for your tool of interest, replace the specific parts of the scripts
 **2. Build and push the Docker image to Dockerhub**
 
-Once you create the Dockerfile, you should build the Docker image locally and push it to Dockerhub (you can also do an automated build)
+Once you create the Dockerfile, next step is to build the Docker image and push it to Dockerhub manually (you can also do an `automated build <https://learning.cyverse.org/projects/container_camp_workshop_2019/en/latest/docker/dockeradvanced.html#automated-docker-image-building-from-github>`_)
 
-.. code-block::
+.. code-block:: bash
 
    $ docker build -t upendradevisetty/fastq-sample-osg:0.8 .
+
    $ docker push upendradevisetty/fastq-sample-osg:0.8
 
 **3. Test Docker image**
 
-Testing of OSG-RMTA docker image can be done in two ways: Locally using Singularity and on Open Science Grid (OSG)
+Testing of OSG-RMTA docker image can be done in two ways: Locally using Singularity and on Open Science Grid (OSG). Since many users don't have access to OSG, we recommed that you test it locally. 
 
 .. Important::
   
-  This is very important step as it is very hard to troubleshoot after you integrate the OSG tool in DE. 
+  This is very important step as it is very hard to troubleshoot after you integrate the OSG tool in DE
 
-3.1. Creating an environment for testing docker image locally
-
-.. Note::
-  
-  Since singularity will be used for testing local images, make sure you install Singularity on your computer/server
-
-3.1.1. Create a folder with input file(s) and output folder on CyVerse Datastore
+3.1 Create a folder with input file(s) and output folder on CyVerse Datastore
 
 For this example, the only input file is `Read1.fastq`. I have this input file in this path on Datastore `/iplant/home/upendra_35/fastq-sample-osg/Read1.fastq` and output folder in this path on Datastore `/iplant/home/upendra_35/fastq-sample-osg/output`
 
-3.1.2. Create input and output path files
+3.2 Create input and output path files
 
 The next step is to create an input and output path files that contains the paths to the input and output respectively. 
 
-.. code-block::bash
+.. code-block:: bash
 
   $ cat input-paths.txt 
     /iplant/home/upendra_35/fastq-sample-osg/Read1.fastq
@@ -190,11 +192,13 @@ The next step is to create an input and output path files that contains the path
   $ cat output-paths.txt 
     /iplant/home/upendra_35/fastq-sample-osg/output
 
-3.1.3. Create input and output tickets from input and output paths
+3.3 Create input and output tickets from input and output paths files
 
 Using `create-tickets.sh <https://github.com/upendrak/fastq-sample-osg/blob/master/create-tickets.sh>`, create tickets for both inputs and outputs
 
 .. code-block:: bash
+
+  $ wget https://raw.githubusercontent.com/upendrak/fastq-sample-osg/master/create-tickets.sh
 
   $ mkdir sample_data
 
@@ -208,13 +212,13 @@ Using `create-tickets.sh <https://github.com/upendrak/fastq-sample-osg/blob/mast
     # application/vnd.de.path-list+csv; version=1
     3fe4ea0dab5241cfb69420335c0902,/iplant/home/upendra_35/fastq-sample-osg/output 
 
-3.1.4. Create a ``config.json`` file in the `sample_data` folder
+3.4 Create a ``config.json`` file in the `sample_data` folder
 
 Here is an example of ``config.json`` for the `fastq-sample-osg` tool
 
-.. code-block::bash
+.. code-block:: bash
 
-   $ cat sample_data/config.json 
+   $ vi sample_data/config.json 
     {
         "arguments": [
             "-n",
@@ -235,31 +239,31 @@ Here is an example of ``config.json`` for the `fastq-sample-osg` tool
 
 This is similar to running on the commandline like this..
 
-.. code-block::bash
+.. code-block:: bash
 
    $ fastq-sample -n 10 Read1.fastq
 
-3.1.5 Pull the Docker image as singularity file (.sif)
+3.5 Pull the Docker image as singularity file (.sif)
 
 .. Note::
 
-  You need to have Singularity installed first inorder to run this..
+  You need to have `Singularity <https://sylabs.io/guides/3.0/user-guide/installation.html>`_ installed first inorder to run this
 
-.. code-block::bash
+.. code-block:: bash
 
    $ singularity pull docker://upendradevisetty/fastq-sample-osg:0.8
 
-This will create `fastq-sample-osg_0.8.sif` in your working directory
+This will create `fastq-sample-osg_0.8.sif` singularity image in your working directory
 
-3.1.6 Test the singularity image
+3.6 Test the singularity image
 
-Once you have the input and output tickets created, you are ready for the actual test with Singularity image
+Once you have the input, output tickets and config files created, you are ready for the test with Singularity image
 
 .. Note::
 
-   Before you run this, make sure that you remove the irods password onto your system by running ``rm ~/.irods/.irodsA``
+   Before you run this, make sure that you remove the irods password in your system by running ``rm ~/.irods/.irodsA``
 
-.. code-block::bash
+.. code-block:: bash
 
   $ cd sample_data
 
@@ -282,9 +286,12 @@ Once you have the input and output tickets created, you are ready for the actual
 
   It will prompt you to enter your irods passwords several times, if so, then keep pressing the ENTER until the job is successfully finished. The output files will be uploaded to your output folder in datastore.
 
-Once your job has finished, you should expect to see the input (`Read1.fastq`) and output (`sample.fastq`) files in the current working directory and also in the in the output directory. 
+Once your job has finished, you should expect to see the input (``Read1.fastq``) and output (``sample.fastq``) files in the current working directory and also in the in the output directory. 
 
 .. code-block::bash
+
+  $ ls
+
 
   $ ils /iplant/home/upendra_35/fastq-sample-osg/output
     /iplant/home/upendra_35/fastq-sample-osg/output:
@@ -292,19 +299,23 @@ Once your job has finished, you should expect to see the input (`Read1.fastq`) a
       out.txt
       sample.fastq
 
-4. Submit a pull request to OSG github repo for `fastq-sample-osg` tool
+4. Submit a pull request to OSG github repo for ``fastq-sample-osg`` tool
 
-Once the Singularity run works, add your Docker image in `here <https://github.com/opensciencegrid/cvmfs-singularity-sync/blob/master/docker_images.txt>`_. For this particular example, we will add `upendradevisetty/fastq-sample-osg:0.8` in there.
+Once the Singularity run works, add your Docker image in `here <https://github.com/opensciencegrid/cvmfs-singularity-sync/blob/master/docker_images.txt>`_. For this particular example, we will add ``upendradevisetty/fastq-sample-osg:0.8`` in there.
 
 .. Note::
 
   You will have to fork and do a PR for this to work
 
+Here is a screenshot of ``fastq-sample-osg:0.8`` pull request to OSG github repo
+
+|osg-cvmfs|
+
 After the PR is merged, it takes few hours for the image to be available on CVMFS.
 
 5. Integrate DE tool using “Add Tools” option in DE
 
-Now that the `fastq-sample-osg` Docker/Singularity image has been tested, it is now ready to be integrated into DE. 
+After the image is available on OSG, it is now ready to be integrated into DE. 
 
 5.1 Log-in to CyVerse Discovery Environment and click on the "Apps" window
 
@@ -319,7 +330,7 @@ Now that the `fastq-sample-osg` Docker/Singularity image has been tested, it is 
   Image Name: upendradevisetty/fastq-sample-osg
   Docker Hub URL: https://hub.docker.com/r/upendradevisetty/fastq-sample-osg
   Tag: 0.8
-  OSG Image Path: /cvmfs/singularity.opensciencegrid.org/upendradevisetty/
+  OSG Image Path: /cvmfs/singularity.opensciencegrid.org/upendradevisetty/fastq-sample-osg:0.8
 
 |add_tool_osg|
 
@@ -355,3 +366,7 @@ Post your question using the intercom button on the bottom right of this page:
 .. |add_tool_osg| image:: img/add_tool_form_osg.png
   :height: 300
   :width: 500
+
+.. |osg-cvmfs| image:: img/add_tool_form_osg_cvmfs.png
+  :height: 200
+  :width: 300
