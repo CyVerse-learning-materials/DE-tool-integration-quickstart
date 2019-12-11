@@ -5,13 +5,28 @@
 |Home_Icon|_
 `Learning Center Home <http://learning.cyverse.org/>`_
 
-**TOOL INTEGRATION IN DE**
+**Tool Integration in DE**
 ==========================
+
+Tool integration in CyVerse `Discovery Environment <https://de.cyverse.org/>`_ can be done either for executable tool (includes osg) or interactive tool.
+
+.. toctree::
+        :maxdepth: 1
+
+        Executable Tools <self>
+        Open-Science-Grid (OSG) Tools <osg.rst>
+        Interactive Tools (VICE) Tools <interacative.rst>
 
 Goal
 ----
 
-This 3-step quickstart guide allows users to integrate the Docker images of their favorite tools in DE
+This 3-step quickstart allows users to integrate the Docker images of their favorite software as **executable** tool type in DE. If users are interested in integrating the Docker images of their favorite software as **osg** or **interactive**, please refer to here and here respectively. 
+
+.. Important::
+
+  What is executable software/tool?
+
+  Any software/tool that can be run on the command line without the need to open any ports
 
 -----
 
@@ -75,8 +90,8 @@ Input and example data
 
 ----
 
-*Get started*
---------------
+Get started
+===========
 
 - Find the Docker image of your tool/software of your interest
 - Test the Docker image with the test data
@@ -136,7 +151,7 @@ Now that the `fastq-sample` Docker image has been tested, it is now ready to be 
 
 3.2 Click "Manage Tools" -> "Tools" -> "Add Tool" and fill the details about your Docker image
 
-.. Note::
+.. code-block::bash
 
   Tool-Name: fastq-sample
   Description: A tool to sample random reads from a fastq file
@@ -149,6 +164,9 @@ Now that the `fastq-sample` Docker image has been tested, it is now ready to be 
 |add_tool|
 
 3.3 Procede to create an app in Discovery Environment
+
+The next step is the
+
 ----
 
 Additional information, help
