@@ -94,7 +94,8 @@ Get started
 
 - Integrate DE tool using “Add Tools” option in DE
 
-**1. Create a Docker image for your tool**
+1. Create a Docker image for your tool
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This is the first step in the process of making OSG tool integration in DE. The minimum requirements for creating a Docker image include the following dependencies (apart from the dependencies that are needed for your tool of interest)
 
@@ -158,7 +159,9 @@ We will use `fastq-sample <https://homes.cs.washington.edu/~dcjones/fastq-tools/
 .. Note::
 
   The ``Dockerfile`` and ``wrapper`` files are specific for ``fastq-sample`` tool. If you want to create OSG tool for your tool of interest, replace the specific parts of the scripts
-**2. Build and push the Docker image to Dockerhub**
+
+2. Build and push the Docker image to Dockerhub
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Once you create the Dockerfile, next step is to build the Docker image and push it to Dockerhub manually (you can also do an `automated build <https://learning.cyverse.org/projects/container_camp_workshop_2019/en/latest/docker/dockeradvanced.html#automated-docker-image-building-from-github>`_)
 
@@ -168,7 +171,8 @@ Once you create the Dockerfile, next step is to build the Docker image and push 
 
    $ docker push upendradevisetty/fastq-sample-osg:0.8
 
-**3. Test Docker image**
+3. Test Docker image
+~~~~~~~~~~~~~~~~~~~~~
 
 Testing of OSG-RMTA docker image can be done in two ways: Locally using Singularity and on Open Science Grid (OSG). Since many users don't have access to OSG, we recommed that you test it locally. 
 
@@ -212,9 +216,9 @@ Using `create-tickets.sh <https://github.com/upendrak/fastq-sample-osg/blob/mast
     # application/vnd.de.path-list+csv; version=1
     3fe4ea0dab5241cfb69420335c0902,/iplant/home/upendra_35/fastq-sample-osg/output 
 
-3.4 Create a ``config.json`` file in the `sample_data` folder
+3.4 Create a ``config.json`` file in the ``sample_data`` folder
 
-Here is an example of ``config.json`` for the `fastq-sample-osg` tool
+Here is an example of ``config.json`` for the ``fastq-sample-osg`` tool
 
 .. code-block:: bash
 
@@ -300,6 +304,7 @@ Once your job has finished, you should expect to see the input (``Read1.fastq``)
       sample.fastq
 
 4. Submit a pull request to OSG github repo for ``fastq-sample-osg`` tool
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Once the Singularity run works, add your Docker image in `here <https://github.com/opensciencegrid/cvmfs-singularity-sync/blob/master/docker_images.txt>`_. For this particular example, we will add ``upendradevisetty/fastq-sample-osg:0.8`` in there.
 
@@ -314,12 +319,13 @@ Here is a screenshot of ``fastq-sample-osg:0.8`` pull request to OSG github repo
 After the PR is merged, it takes few hours for the image to be available on CVMFS.
 
 5. Integrate DE tool using “Add Tools” option in DE
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 After the image is available on OSG, it is now ready to be integrated into DE. 
 
 5.1 Log-in to CyVerse Discovery Environment and click on the "Apps" window
 
-3.2 Click "Manage Tools" -> "Tools" -> "Add Tool" and fill the details about your Docker image
+5.2 Click "Manage Tools" -> "Tools" -> "Add Tool" and fill the details about your Docker image
 
 .. code-block::bash
 
