@@ -163,8 +163,7 @@ Now that the `fastq-sample` Docker image has been tested, it is now ready to be 
 
 |add_tool|
 
-Procede to create an app in Discovery Environment
-
+Procede `here <https://wiki.cyverse.org/wiki/display/DEmanual/Designing+the+Interface>`_ to create an app interface in the CyVerse Discovery Environment
 ----
 
 Additional information, help

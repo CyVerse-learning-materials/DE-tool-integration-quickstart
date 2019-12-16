@@ -11,7 +11,7 @@
 Goal
 ----
 
-This quickstart contains the complete for integrating osg tool in DE which is mainly intended for high-throughput processing
+This quickstart contains the complete instructions for integrating osg tools in DE which is mainly intended for high-throughput processing
 
 .. Important::
 
@@ -340,7 +340,7 @@ After the image is available on OSG, it is now ready to be integrated into DE.
 
 |add_tool_osg|
 
-Procede to create an app in Discovery Environment
+Procede `here <https://wiki.cyverse.org/wiki/display/DEmanual/Designing+the+Interface>`_ to create an app interface in the CyVerse Discovery Environment
 
 ----
 
