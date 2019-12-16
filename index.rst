@@ -11,11 +11,11 @@
 Tool integration in CyVerse `Discovery Environment <https://de.cyverse.org/>`_ can be done either for executable tool (includes osg) or interactive tool.
 
 .. toctree::
-        :maxdepth: 2
+        :maxdepth: 1
 
         Executable Tools <self>
         Open-Science-Grid (OSG) Tools <osg.rst>
-        Interactive Tools (VICE) Tools <interacative.rst>
+        Interactive (VICE) Tools <interactive.rst>
 
 Goal
 ----
@@ -164,6 +164,7 @@ Now that the `fastq-sample` Docker image has been tested, it is now ready to be 
 |add_tool|
 
 Procede `here <https://wiki.cyverse.org/wiki/display/DEmanual/Designing+the+Interface>`_ to create an app interface in the CyVerse Discovery Environment
+
 ----
 
 Additional information, help
