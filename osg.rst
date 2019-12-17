@@ -174,7 +174,7 @@ Once you create the Dockerfile, next step is to build the Docker image and push 
 3. Test Docker image
 ~~~~~~~~~~~~~~~~~~~~~
 
-Testing of OSG-RMTA docker image can be done in two ways: Locally using Singularity and on Open Science Grid (OSG). Since many users don't have access to OSG, we recommed that you test it locally. 
+Testing of OSG-fastq-sample docker image can be done in two ways: Locally using Singularity and on Open Science Grid (OSG). Since many users don't have access to OSG, we recommed that you test it locally. 
 
 .. Important::
   
