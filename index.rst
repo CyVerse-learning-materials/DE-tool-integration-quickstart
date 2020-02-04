@@ -139,7 +139,7 @@ This is optional but highly recommended step to confirm that the Docker image fo
 
 .. code-block:: bash
 
-  $ docker run --rm -u $(id -u):$(id -g) -v $PWD:/data -w /data upendradevisetty/fastq-sample:0.8 -n 10 Read1.fastq
+  $ docker run --rm -v $PWD:/data -w /data upendradevisetty/fastq-sample:0.8 -n 10 Read1.fastq
 
 Once you get the expected output, then you are ready for the next step
 
