@@ -11,17 +11,17 @@
 Goal
 ----
 
-This quickstart contains the complete instructions for integrating osg tools in DE which is mainly intended for high-throughput processing
+This quickstart contains the complete instructions for integrating `OpenScienceGrid <https://opensciencegrid.org/>`_ tools in CyVerse Discovery Environment. OSG tools are intended for high-throughput processing of many files. 
 
 .. Important::
 
-  What is osg tool?
+  **What is the OpenScienceGrid?**: A national, distributed computing partnership for data-intensive research
 
-  Any software/tool that can be run on the command line without the need to open any ports
+  **What is an OSG Tool?**: Any software/tool that can be run in the command line interface without the need to open ports
 
 -----
 
-Prerequisites
+**Prerequisites**
 -------------
 
 Downloads, access, and services
