@@ -189,17 +189,16 @@ Let's first create a Dockerfile using your favorite editor which satisfies the a
 
   If you want to create OSG tool for your tool of interest, replace the specific parts of the script
 
-in ``wrapper`` append the lines # 117-122 with your job information:
+  in ``wrapper`` script append lines # 117-122 with your job information:
 
-.. code-block:: bash
-      # Run the job.
-   def run_job(arguments, output_filename, error_filename):
-       with open(output_filename, "w") as out, open(error_filename, "w") as err:
-           rc = subprocess.call(["fastq-sample"] + arguments, stdout=out, stderr=err)
-           if rc != 0:
-               raise Exception("fastq-sample returned exit code {0}".format(rc))
+  .. code-block:: bash
 
-in
+        # Run the job.
+     def run_job(arguments, output_filename, error_filename):
+         with open(output_filename, "w") as out, open(error_filename, "w") as err:
+             rc = subprocess.call(["fastq-sample"] + arguments, stdout=out, stderr=err)
+             if rc != 0:
+                 raise Exception("fastq-sample returned exit code {0}".format(rc))
 
 2. Build and push the Docker image to Dockerhub
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -290,10 +289,10 @@ This is similar to running on the commandline like this..
 
 3.5 Pull the Docker image as singularity file (.sif)
 
-.. Note::
+.. Important::
 
-  You need to have `Singularity <https://sylabs.io/guides/3.0/user-guide/installation.html>`_ installed first inorder to run this
-
+  You must have `Singularity <https://sylabs.io/guides/3.2/user-guide/installation.html>`_ installed to complete this step.
+  
 .. code-block:: bash
 
    $ singularity pull docker://upendradevisetty/fastq-sample-osg:0.8
@@ -302,11 +301,14 @@ This will create `fastq-sample-osg_0.8.sif` singularity image in your working di
 
 3.6 Test the singularity image
 
-Once you have the input, output tickets and config files created, you are ready for the test with Singularity image
 
-.. Note::
-
-   Before you run this, make sure that you remove the irods password in your system by running ``rm ~/.irods/.irodsA``
+.. Important::
+   
+   Remove your current iRODS password: ``rm ~/.irods/.irodsA``
+   
+   Running this container will overwrite the ``~/.irods/irods_environment.json`` file on the localhost. To regenerate the previous iRODS environment, ``rm -rf ~/.irods/irods_environment.json`` and run ``iinit`` again.
+   
+Once you have created the ``input_ticket.list``, ``output_ticket.list`` and ``config.json`` files in the ``/sample_data`` directory, you are ready for a test with the Singularity image:
 
 .. code-block:: bash
 
