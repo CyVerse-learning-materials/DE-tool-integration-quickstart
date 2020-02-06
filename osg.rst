@@ -39,6 +39,9 @@ Downloads, access, and services
    * - CyVerse account
      - You will need a CyVerse account to complete this exercise
      - |CyVerse User Portal|
+   * - Atmosphere Access (Optional -- for building containers remotely)
+     - Atmosphere access is by request only
+     - Check or request access: `CyVerse User Portal <https://user.cyverse.org/services/mine>`_
    * - Installation of Docker 
      - `Docker <https://docker.com>`_ on the machine you're building containers
       - `Atmosphere Installation instructions <https://cyverse-ez-quickstart.readthedocs-hosted.com/en/latest/>`_
@@ -67,6 +70,11 @@ Platform(s)
       - |Discovery Environment|
       - |DE Manual|
       - |Discovery Environment Guide|
+    * - Atmosphere 
+      - Cloud Virtual Machine
+      - |Atmosphere|
+      - |Atmosphere Manual|
+      
   
 Input and example data
 ~~~~~~~~~~~~~~~~~~~~~~
