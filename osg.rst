@@ -13,11 +13,11 @@ Goal
 
 This quickstart contains the complete instructions for integrating `OpenScienceGrid <https://opensciencegrid.org/>`_ tools in CyVerse Discovery Environment. OSG tools are intended for high-throughput processing of many files. 
 
-.. Important::
+.. FYI::
 
-  **What is the OpenScienceGrid?**: A national, distributed computing partnership for data-intensive research
+  **What is the OpenScienceGrid?** A national, distributed computing partnership for data-intensive research
 
-  **What is an OSG Tool?**: Any software/tool that can be run in the command line interface without the need to open ports
+  **What is an OSG Tool?** Any software/tool that can be run in the command line interface without the need to open ports
 
 -----
 
@@ -44,7 +44,7 @@ Downloads, access, and services
      - Check or request access: `CyVerse User Portal <https://user.cyverse.org/services/mine>`_
    * - Installation of Docker 
      - `Docker <https://docker.com>`_ on the machine you're building containers
-      - `Atmosphere Installation instructions <https://cyverse-ez-quickstart.readthedocs-hosted.com/en/latest/>`_
+     - `Atmosphere Installation instructions <https://cyverse-ez-quickstart.readthedocs-hosted.com/en/latest/>`_
    * - Installation of Singularity
      - `Singularity <https://sylabs.io>`_ on the machine you're building containers 
      - `Atmosphere Installation instructions <https://cyverse-ez-quickstart.readthedocs-hosted.com/en/latest/>`_
@@ -74,6 +74,7 @@ Platform(s)
       - Cloud Virtual Machine
       - |Atmosphere|
       - |Atmosphere Manual|
+      -
       
   
 Input and example data
@@ -113,32 +114,44 @@ Get started
 
 This is the first step in the process of making OSG tool integration in DE. The minimum requirements for creating a Docker image include the following dependencies (apart from the dependencies that are needed for your tool of interest)
 
-1.1 Ubuntu Operating system (preferred 16.04 and beyond)
+.. list-table::
+    :header-rows: 1
+    
+    * - Operating System
+      - Directories
+      - Dependencies
+      - Files
+    * - Debian 
+      - ``/work``
+      - ``icommands``
+      - ``wrapper``
+    * - Ubuntu 16+ 
+      - ``/cvmfs``    
+      - ``wget``     
+      - ``upload-files``
+    * - Centos7+ 
+      -
+      - ``python3``
+      - ``create-ticket.sh``
 
-1.2 Directories named `cvmfs` `work`
+For this example, we will use `fastq-sample <https://homes.cs.washington.edu/~dcjones/fastq-tools/fastq-sample.html>`_. 
 
-1.3 iRODS icommands version 4.0 or above.
-
-1.4 An executable `wrapper` script
-
-1.5 An upload file `upload-files` at `/usr/bin` in the container
-
-We will use `fastq-sample <https://homes.cs.washington.edu/~dcjones/fastq-tools/fastq-sample.html>`_ for integrating as OSG-tool in DE. Let's first create a Dockerfile using your favorite editor which satisfies the above requirements
+Let's first create a Dockerfile using your favorite editor which satisfies the above requirements
 
 .. code-block:: bash
   
   $ mkdir fastq-sample-osg && cd fastq-sample-osg
 
-  $ wget https://raw.githubusercontent.com/upendrak/fastq-sample-osg/master/upload-files
+  $ wget https://data.cyverse.org/dav-anon/iplant/projects/osg/upload-files
 
-  $ wget https://raw.githubusercontent.com/upendrak/fastq-sample-osg/master/wrapper
+  $ wget https://data.cyverse.org/dav-anon/iplant/projects/osg/wrapper
 
 .. code-block:: bash
 
   $ vi Dockerfile
 
   FROM ubuntu:xenial
-  MAINTAINER Upendra Devisetty <upendra@cyverse.org>
+  MAINTAINER User Name <user@cyverse.org>
 
   RUN mkdir /cvmfs /work
 
@@ -154,9 +167,9 @@ We will use `fastq-sample <https://homes.cs.washington.edu/~dcjones/fastq-tools/
 
   WORKDIR /work
 
-  # Define the iRODS package.
-  ENV ICMD_BASE="https://files.renci.org/pub/irods/releases/4.1.10/ubuntu14"
-  ENV ICMD_PKG="irods-icommands-4.1.10-ubuntu14-x86_64.deb"
+  # Define the iRODS package
+  ENV ICMD_BASE="https://files.renci.org/pub/irods/releases/4.1.12/ubuntu14"
+  ENV ICMD_PKG="irods-icommands-4.1.12-ubuntu14-x86_64.deb"
 
   # Install icommands.
   RUN curl -o "$ICMD_PKG" "$ICMD_BASE/$ICMD_PKG" \
@@ -172,7 +185,21 @@ We will use `fastq-sample <https://homes.cs.washington.edu/~dcjones/fastq-tools/
 
 .. Note::
 
-  The ``Dockerfile`` and ``wrapper`` files are specific for ``fastq-sample`` tool. If you want to create OSG tool for your tool of interest, replace the specific parts of the scripts
+  The ``Dockerfile`` and ``wrapper`` files are specific for this example ``fastq-sample`` tool. 
+
+  If you want to create OSG tool for your tool of interest, replace the specific parts of the script
+
+in ``wrapper`` append the lines # 117-122 with your job information:
+
+.. code-block:: bash
+      # Run the job.
+   def run_job(arguments, output_filename, error_filename):
+       with open(output_filename, "w") as out, open(error_filename, "w") as err:
+           rc = subprocess.call(["fastq-sample"] + arguments, stdout=out, stderr=err)
+           if rc != 0:
+               raise Exception("fastq-sample returned exit code {0}".format(rc))
+
+in
 
 2. Build and push the Docker image to Dockerhub
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
