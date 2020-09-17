@@ -103,7 +103,7 @@ We will use `fastq-sample <https://homes.cs.washington.edu/~dcjones/fastq-tools/
 
 .. Note::
 
-  If there is no Docker image available for your tool of interest, then you would either find a Dockerfile which you can use to build the Docker image for your tool of interest or create one. You can get more help with either of that from `here <https://learning.cyverse.org/projects/container_camp_workshop_2019/en/latest>`_
+  If there is no Docker image available for your tool of interest, then you would either find a Dockerfile which you can use to build the Docker image for your tool of interest or create one. You can get more help with either of that from `here <https://learning.cyverse.org/projects/Container-camp-2020/en/latest/>`_
 
 2. Test the Docker image locally on your computer (Optional but recommended)
 

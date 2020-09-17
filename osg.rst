@@ -199,6 +199,16 @@ Let's first create a Dockerfile using your favorite editor which satisfies the a
              rc = subprocess.call(["fastq-sample"] + arguments, stdout=out, stderr=err)
              if rc != 0:
                  raise Exception("fastq-sample returned exit code {0}".format(rc))
+                 
+.. Note::
+
+  Be sure the ``upload-files`` and ``wrapper`` scripts are executable. This can be done by adding the following line to your Dockerfile:
+
+  .. code-block:: bash
+
+        # Make scripts executable:
+        RUN chmod +x /usr/bin/upload-files /usr/bin/wrapper
+                
 
 2. Build and push the Docker image to Dockerhub
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
