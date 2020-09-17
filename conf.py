@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from misc.cyverse_sphinx_conf import *  # noqa
 
 project = 'DE-tool-integration'
-copyright = '2019, CyVerse'
+copyright = '2020, CyVerse'
 author = 'Your Name'
 
 epub_title = project

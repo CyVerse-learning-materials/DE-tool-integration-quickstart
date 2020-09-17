@@ -1,5 +1,3 @@
-_build/
-*.pyc
-.ropeproject/
-*.DS_Store
-buildenv
+**/.DS_Store
+.DS_Store
+_build
