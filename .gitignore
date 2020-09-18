@@ -1,5 +1,4 @@
 _build/
 *.pyc
 .ropeproject/
-*.DS_Store
-buildenv
+.DS_store
